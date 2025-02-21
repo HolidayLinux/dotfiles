@@ -8,10 +8,6 @@
     // Choose the order of the modules
     "modules-left": [
         "hyprland/workspaces",
-       // "sway/mode",
-       // "sway/scratchpad",
-       // "custom/waybar-media",
-		//"custom/waymedia",
 		"custom/media"
     ],
     "modules-center": [
@@ -21,22 +17,11 @@
 		"tray"
     ],
     "modules-right": [
-        //"mpd",  //MUSIC PLAER
-       // "pulseaudio",
-       "wireplumber",
+        "pulseaudio",
+       //"wireplumber", //PIPEWARE NATIVE EXTENSION
 		"network",
         "group/motherboard",
-        //"power-profiles-daemon", // ???
-       // "cpu",
-       //"memory",
-        //"temperature",
-        //"backlight",
-       // "keyboard-state",
-        //"sway/language",
         "battery",
-	//"keyboard-state",
-        //"battery#bat2",
-        "clock",
 		"hyprland/language",
         "custom/power"
     ],
@@ -65,19 +50,19 @@
              "default": ""
          }
      },
-"wireplumber": {
-	"format": " {volume}%",
-	"format-muted": "X",
-	"on-click": "helvum"
-	},
-	 "keyboard-state": {
-        "numlock": true,
-        "capslock": true,
-        "format": "{name} {icon}",
-        "format-icons": {
-            "locked": "",
-            "unlocked": ""
-        }
+	"wireplumber": {
+		"format": " {volume}%",
+		"format-muted": "X",
+		"on-click": "helvum"
+		},
+		 "keyboard-state": {
+			"numlock": true,
+			"capslock": true,
+			"format": "{name} {icon}",
+			"format-icons": {
+				"locked": "",
+				"unlocked": ""
+			}
     },
     "sway/mode": {
         "format": "<span style=\"italic\">{}</span>"
