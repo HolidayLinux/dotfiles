@@ -1,3 +1,4 @@
+
 :set clipboard+=unnamedplus
 :set number
 :set relativenumber
@@ -18,11 +19,9 @@ Plug 'https://github.com/rafi/awesome-vim-colorschemes'
 Plug 'https://github.com/ryanoasis/vim-devicons'
 Plug 'tc50cal/vim-terminal'
 Plug 'majutsushi/tagbar'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'neoclide/coc.nvim'
 Plug 'mgedmin/python-imports.vim'
-Plug 'nvim-lua/plenary.nvim'
-Plug 'dinhhuy258/git.nvim'
-Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.8' }
+Plug 'pappasam/coc-jedi', { 'do': 'yarn install --frozen-lockfile && yarn build', 'branch': 'main' }
 call plug#end()
 
 colorscheme iceberg
@@ -32,9 +31,6 @@ nmap <F8> :TagbarToggle<CR>
 nmap <F5> <Esc>:w<CR>:!clear;python %<CR>
 inoremap <silent><expr> <tab> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<TAB>"
 inoremap <silent><expr> <cr> "\<c-g>u\<CR>"
-inoremap jj <Esc>
 if &term == 'xxterm-256color'
     let &t_ut=''
 endif
-let g:coc_global_extensions = [
-      \'coc-python']

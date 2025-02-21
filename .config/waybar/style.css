@@ -163,6 +163,18 @@ tooltip {
     color: @accent2;
 }
 
+#custom-packages{
+}
+#custom-packages.green{
+	color: #39c53d
+}
+#custom-packages.yellow{
+	color: yellow
+}
+#custom-packages.red{
+	color: red
+}
+
 #custom-updater {
     color: #7287fd;
 }
@@ -256,8 +268,7 @@ label:focus {
     color: @accent3;
 }
 #custom-media {
-    background-color: #66cc99;
-    color: #2a5c45;
+    color: white;
     min-width: 100px;
 }
 

@@ -10,16 +10,18 @@
         "hyprland/workspaces",
        // "sway/mode",
        // "sway/scratchpad",
-        "custom/waybar-media",
-		"custom/waymedia",
+       // "custom/waybar-media",
+		//"custom/waymedia",
 		"custom/media"
     ],
     "modules-center": [
-        "hyprland/window"
+        //"hyprland/window"
+		"custom/packages",
+		"idle_inhibitor",
+		"tray"
     ],
     "modules-right": [
         //"mpd",  //MUSIC PLAER
-        "idle_inhibitor",
        // "pulseaudio",
        "wireplumber",
 		"network",
@@ -36,7 +38,6 @@
         //"battery#bat2",
         "clock",
 		"hyprland/language",
-        "tray",
         "custom/power"
     ],
 "group/motherboard": {
@@ -52,7 +53,7 @@
         "disable-scroll": true,
          "all-outputs": true,
          "warp-on-scroll": false,
-         "format": "{name}: {icon}",
+         "format": "{name}{icon}",
          "format-icons": {
              "1": "",
              "2": "",
@@ -122,8 +123,7 @@
         }
     },
 	"hyprland/language":{
-		"format":"{short}",
-
+		"format":"{short}"
 	},
     "tray": {
         // "icon-size": 21,
@@ -212,17 +212,26 @@
         "on-click": "pavucontrol"
     },
     "custom/media": {
-        "format": "{icon} {}",
-        "return-type": "json",
+        "format": "{}",
+        //"return-type": "json",
         "max-length": 40,
         "format-icons": {
             "yandex-music": "",
-            "default": "🎜"
+            "default": ""
         },
+		"restart-interval": 5,
         "escape": true,
-        "exec": " playerctl metadata --fromat {{artUrl}}" // Script in resources folder
+        "exec": " playerctl metadata --format '{{artist}}-{{title}}' " // Script in resources folder
         // "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
     },
+	"custom/packages":{
+		"format": "  {}",
+		"return-type": "json",
+		"tooltip":{},
+		"exec" : "python ~/.config/waybar/scripts/packages/packages.py ",
+		"restart-interval": 3600,
+		"on-click": "kitty --hold yay"
+	},
     "custom/power": {
         "format" : "⏻ ",
 		"tooltip": false,
