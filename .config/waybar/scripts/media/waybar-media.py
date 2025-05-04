@@ -6,9 +6,11 @@ import os
 import sys
 import textwrap
 import traceback
-
+import gi
 import psutil
+gi.require_version(namespace="Playerctl",version="2.0")
 from gi.repository import GLib
+from gi.repository import Playerctl
 from pydbus import SessionBus
 
 MPRIS_PLAYER_OBJ_PATH = '/org/mpris/MediaPlayer2'
@@ -48,11 +50,15 @@ class Player:
 
     @property
     def name(self):
-        name = self.owner_process.name()
-        if name == 'plasma-browser-integration-host':
-            cmdline = ' '.join(self.owner_process.cmdline())
-            return self._identify_browser_by_cmdline(cmdline)
-        return name
+        process = self._get_owner_process()
+        if process is None:
+            return 'Not Player Yet'
+        else:
+            name = process.name
+            if name == 'plasma-browser-integration-host':
+                cmdline = ' '.join(process.cmdline())
+                return self._identify_browser_by_cmdline(cmdline)
+            return name
 
     @property
     def status(self):
@@ -92,6 +98,12 @@ class Player:
             self._obj.Next()
 
 
+class BlobPlayer(Player):
+    def __init__(self):
+        pass
+    
+
+
 class MediaWatcher:
     def __init__(self, bus, do_print_status=False):
         self._bus = bus
@@ -121,13 +133,16 @@ class MediaWatcher:
         self._subscription.unsubscribe()
 
     def _find_players(self):
-        owner_to_player = {}
+        owner_to_player:dict[str,Player] = {}
         for service in KNOWN_SERVICES:
             try:
                 owner_name = self._bus.dbus.GetNameOwner(service)
             except GLib.Error:
                 continue
             owner_to_player[owner_name] = Player(bus=self._bus, owner_name=owner_name)
+        if(len(owner_to_player) == 0):
+            for player in Playerctl.list_players():
+                owner_to_player[player.name] = Player(bus=self._bus, owner_name=player.name) 
         return owner_to_player
 
     def _group_players_by_status(self):
@@ -139,9 +154,10 @@ class MediaWatcher:
                 status_to_players[player.status] = [player]
         return status_to_players
 
-    def _find_active_player(self):
-        players_by_status = self._group_players_by_status()
+    def _find_active_player(self) -> Player|None:
+        players_by_status:dict[str,list] = self._group_players_by_status()
 
+        print(players_by_status)
         if players_by_status.get('playing'):
             players_by_status['playing'].sort(key=lambda x: x.owner_process.create_time(), reverse=True)
             return players_by_status['playing'][0]
@@ -163,30 +179,33 @@ class MediaWatcher:
 
 
 class MediaWatcherStatusBuilder:
-    def __init__(self, watcher):
+    def __init__(self, watcher:MediaWatcher):
         self.watcher = watcher
 
     def _build_tooltip(self):
         tooltip = []
         player = self.watcher.player
-
-        if player.status in ['playing', 'paused']:
-            tooltip.append(player.status.title() + ':')
-        if player.title:
-            tooltip.append(player.title)
-        if player.album:
-            tooltip.append(player.album)
-        if player.artist:
-            tooltip.append(player.artist)
-        if player.name:
-            tooltip.append('(' + player.name + ')')
+        if player is None:
+            tooltip.append('No active player')
+        else :
+            if player.status in ['playing', 'paused','stopped']:
+                tooltip.append(player.status.title() + ':')
+            if player.title:
+                tooltip.append(player.title)
+            if player.album:
+                tooltip.append(player.album)
+            if player.artist:
+                tooltip.append(player.artist)
+            if player.name:
+                tooltip.append(f'({player.name})')
 
         return '\n'.join(tooltip) if tooltip else None
 
     def _build_text(self, max_width, title_to_artist_ratio=2 / 3, separator=' - ', placeholder='…'):
         max_width = max_width - len(separator)
         player = self.watcher.player
-
+        if player is None:
+            return 'No player'
         if player.title and player.artist:
             title_width = math.floor(max_width * title_to_artist_ratio)
             artist_width = max_width - title_width
@@ -216,11 +235,13 @@ class MediaWatcherStatusBuilder:
     def _build_classes(self):
         classes = []
         player = self.watcher.player
-
-        if player.status in ['playing', 'paused']:
-            classes.append(player.status)
+        if player is None:
+            classes.append('None')
         else:
-            classes.append('stopped')
+            if player.status in ['playing', 'paused']:
+                classes.append(player.status)
+            else:
+                classes.append('stopped')
 
         return classes
 
@@ -249,26 +270,28 @@ def main():
         print_usage()
         return
 
-    with MediaWatcher(bus, do_print_status=(arg == 'status')) as media_watcher:
-        if arg == 'status':
-            while True:
-                try:
-                    loop.run()
-                except GLib.Error:
-                    pass
-        elif arg == 'playpause':
-            media_watcher.player.playpause()
-        elif arg == 'play':
-            media_watcher.player.play()
-        elif arg == 'pause':
-            media_watcher.player.pause()
-        elif arg == 'previous':
-            media_watcher.player.previous()
-        elif arg == 'next':
-            media_watcher.player.next()
-        else:
-            print_usage()
-            return
+    media_watcher = MediaWatcher(bus, do_print_status=(arg == 'status'))
+    with media_watcher:
+        if media_watcher.player != None:
+            if arg == 'status':
+                while True:
+                    try:
+                        loop.run()
+                    except GLib.Error:
+                        pass
+            elif arg == 'playpause':
+                media_watcher.player.playpause()
+            elif arg == 'play':
+                media_watcher.player.play()
+            elif arg == 'pause':
+                media_watcher.player.pause()
+            elif arg == 'previous':
+                media_watcher.player.previous()
+            elif arg == 'next':
+                media_watcher.player.next()
+            else:
+                print_usage()
+                return
 
 
 if __name__ == '__main__':
