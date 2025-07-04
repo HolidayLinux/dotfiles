@@ -1,6 +1,6 @@
-** My Arch(BTW) Hyprland dotfiles 
+## My Arch(BTW) Hyprland dotfiles 
 
-*** Apps config:
+### Apps config:
 - Waybar
 - Kitty
 - nvim
