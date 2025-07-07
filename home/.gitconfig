@@ -1,0 +1,10 @@
+[user]
+	email = alega00@mail.ru
+	name = Holiday
+
+[alias]
+  s = status -s
+  cmt = commit 
+  cmta = commit -a 
+
+
