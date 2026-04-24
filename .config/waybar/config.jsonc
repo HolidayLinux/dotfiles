@@ -217,26 +217,9 @@
     "tooltip": false,
     "on-click": "",
   },
-  "custom/waybar-media": {
-    "return-type": "json",
-    "exec": "~/.config/waybar/scripts/media/waybar-media.py status",
-    "on-click": "~/.config/waybar/scripts/media/waybar-media.py playpause",
-    "on-scroll-up": "~/.config/waybar/scripts/media/waybar-media.py previous",
-    "on-scroll-down": "~/.config/waybar/scripts/media/waybar-media.py next",
-    "escape": true,
-  },
-  "custom/waymedia": {
-    "format": "{icon}{artist}{divider}{title}",
-    "exec": "~/.config/waybar/scripts/waymedia/waymedia",
-    "interval": 1,
-    "limit": 60,
-    "on-click": "playerctl play-pause",
-    "on-scroll-up": "playerctl next",
-    "on-scroll-down": "playerctl previous",
-  },
   "mpris": {
 	"format": "{player_icon} {artist} - {title}",
-	"format-paused": "{status_icon} <i>{dynamic}</i>",
+	"format-paused": "{status_icon} <i>{artist}-{title}</i>",
 	"player-icons": {
 		"default": "▶",
 		"mpv": "🎵"
