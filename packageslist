@@ -1,3 +1,4 @@
+7zip
 archlinux-xdg-menu
 awesome-terminal-fonts
 base
@@ -9,6 +10,8 @@ calc
 clang
 code
 dolphin
+docker
+docker-compose
 dunst
 efibootmgr
 facad
