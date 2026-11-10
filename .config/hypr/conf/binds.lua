@@ -16,6 +16,7 @@ local message = "Telegram"
 local wallpaper_app = "~/.config/hypr/app/hyprpapergui/hyprpapergui"
 local code = "code"
 local vpn = "v2rayn"
+local lock = "hyprlock"
 
 -- Example binds, see https://wiki.hyprland.org/Configuring/Binds/ for more
 hl.bind(mainMod .. " + RETURN", hl.dsp.exec_cmd(terminal))
@@ -24,7 +25,7 @@ hl.bind(mainMod .. " + W", hl.dsp.exec_cmd(wallpaper_app))
 hl.bind(mainMod .. " + ALT + M", hl.dsp.exit())
 hl.bind(mainMod .. " + B", hl.dsp.exec_cmd(browser))
 hl.bind(mainMod .. " + SHIFT + M", hl.dsp.exec_cmd(music))
-hl.bind(mainMod .. " + L", hl.dsp.exec_cmd("hyprlock"))
+hl.bind(mainMod .. " + L", hl.dsp.exec_cmd(lock))
 hl.bind(mainMod .. " + C", hl.dsp.exec_cmd(code))
 hl.bind(mainMod .. " + Z", hl.dsp.exec_cmd("zeditor"))
 hl.bind(mainMod .. " + T", hl.dsp.exec_cmd(message))

@@ -1,0 +1,4 @@
+xhost + 
+sudo hiddify
+
+

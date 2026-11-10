@@ -1,6 +1,5 @@
 --HOLIDAY CONFIG
 --
---
 --SOURCES LIST#
 
 -- Source: ~/.config/hypr/conf/binds.conf — convert this file to Lua and ensure it is on Lua's package.path.
@@ -14,6 +13,11 @@ require("conf.locales")
 -- Source: ~/.config/hypr/conf/windows.conf — convert this file to Lua and ensure it is on Lua's package.path.
 require("conf.windows")
 
+hl.config({
+	quirks = {
+		skip_non_kms_dmabuf_formats = false,
+	},
+})
 --############################
 --## ENVIRONMENT VARIABLES ###
 --############################
